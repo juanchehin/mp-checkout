@@ -13,6 +13,10 @@ class IndexRoutes {
     }
     config() {
         this.router.get('/', indexController_1.default.index);
+        this.router.get('/success', indexController_1.default.success);
+        this.router.get('/error', indexController_1.default.error);
+        this.router.get('/pending', indexController_1.default.pending);
+        this.router.post('/webhook', indexController_1.default.webhook);
     }
 }
 const indexRoutes = new IndexRoutes();

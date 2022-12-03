@@ -13,6 +13,10 @@ class IndexRoutes {
 
     config(): void {
         this.router.get('/', indexController.index);
+        this.router.get('/success', indexController.success);
+        this.router.get('/error', indexController.error);
+        this.router.get('/pending', indexController.pending);
+        this.router.post('/webhook', indexController.webhook);
     }
 
 }
