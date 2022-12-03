@@ -131,8 +131,6 @@ dist
 
 node_modules/*
 
-src
-./src
 
 ./uploads/images
 /uploads/images

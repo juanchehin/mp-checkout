@@ -9,16 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// import pool from '../database';
-// const bcrypt = require('bcrypt');
 const axios = require("axios");
+require('dotenv').config();
 class CheckoutController {
     constructor() {
         this.mercadoPagoUrl = "https://api.mercadopago.com/checkout";
     }
-    // constructor(paymentService) {
-    //     this.paymentService = paymentService; 
-    //   }
     // ==================================================
     //     
     // ==================================================
@@ -34,7 +30,8 @@ class CheckoutController {
                 unit, //cantidad que estamos vendiendo
                 img // imagen de referencia del producto o servicio
                 );
-                return res.redirect(checkout.init_point);
+                console.log("checkout ; ", checkout);
+                //       return res.redirect(checkout.init_point); 
                 //si es exitoso los llevamos a la url de Mercado Pago
                 return res.json({ url: checkout.init_point });
                 // o si queres devolver la url al front 
@@ -44,7 +41,7 @@ class CheckoutController {
                 console.log("err es : ", err);
                 return res.status(500).json({
                     error: true,
-                    msg: "Hubo un error con Mercado Pago"
+                    msg: "Hubo un error con Mercado Pago" + err
                 });
             }
         });
@@ -54,6 +51,7 @@ class CheckoutController {
     // ==================================================
     webhook(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            res.json({ text: 'Entraste a webhook!' });
             if (req.method === "POST") {
                 let body = "";
                 req.on("data", chunk => {
@@ -75,7 +73,10 @@ function createPaymentMercadoPago(name, price, unit, img) {
         const mercadoPagoUrl = "https://api.mercadopago.com/checkout";
         console.log("asa createPaymentMercadoPago");
         // recibimos las props que le mandamos desde el PaymentController
-        const url = `${mercadoPagoUrl}/preferences?access_token=${process.env.MP_ACCESS_TOKEN_TEST}`;
+        const access_token = process.env.MP_ACCESS_TOKEN_TEST;
+        console.log("access_token es : " + access_token);
+        const url = `${mercadoPagoUrl}/preferences?access_token=${access_token}`;
+        console.log("url es : " + url);
         // url a la que vamos a hacer los requests
         const items = [
             {
@@ -144,7 +145,7 @@ function createPaymentMercadoPago(name, price, unit, img) {
                 failure: "https://localhost:3000.com/error"
                 // url a la que va a redireccionar si falla el pago
             },
-            notification_url: "https://api-mercadopago-checkout.herokuapp.com/webhook",
+            notification_url: "https://mp-checkout-api.herokuapp.com/webhook",
             // declaramos nuestra url donde recibiremos las notificaciones
             auto_return: "approved"
             // si la compra es exitosa automaticamente redirige a "success" de back_urls
