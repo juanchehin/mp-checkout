@@ -20,10 +20,12 @@ class IndexController {
 
     public webhook(req: Request, res: Response) {
 
+        console.log("pasa por webhook")
         if (req.method === "POST") { 
             let body = ""; 
             req.on("data", chunk => {  
               body += chunk.toString();
+              console.log("body 1 ",body)
             });
             req.on("end", () => {  
               console.log(body, "webhook response"); 

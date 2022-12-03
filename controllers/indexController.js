@@ -15,10 +15,12 @@ class IndexController {
         res.send("<html> <head>success!</head><body><h1>Esta es la pagina en la ruta /success </p></h1></body></html>");
     }
     webhook(req, res) {
+        console.log("pasa por webhook");
         if (req.method === "POST") {
             let body = "";
             req.on("data", chunk => {
                 body += chunk.toString();
+                console.log("body 1 ", body);
             });
             req.on("end", () => {
                 console.log(body, "webhook response");
