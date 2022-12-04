@@ -16,13 +16,17 @@ class IndexController {
     }
     webhook(req, res) {
         console.log("pasa por webhook");
+        console.log("pasa por req.method : ", req.method);
+        console.log("pasa por req : ", req);
         if (req.method === "POST") {
+            console.log("pasa por POST : ");
             let body = "";
             req.on("data", chunk => {
                 body += chunk.toString();
                 console.log("body 1 ", body);
             });
             req.on("end", () => {
+                console.log("pasa por POST : ");
                 console.log(body, "webhook response");
                 res.end("ok");
             });
