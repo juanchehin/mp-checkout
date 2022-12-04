@@ -32,7 +32,7 @@ class IndexController {
               console.log("body 1 ",body)
             });
             req.on("end", () => {  
-                console.log("pasa por POST : ")
+                console.log("pasa por emd  2 : ")
               console.log(body, "webhook response"); 
               res.end("ok");
             });
