@@ -19,21 +19,28 @@ class IndexController {
         console.log("pasa por webhook");
         console.log("pasa por req.method : ", req.method);
         console.log("pasa por webhook req.query : ", req.query);
-        console.log("pasa por webhook");
-        console.log("pasa por webhook req.params : ", req.params);
-        console.log("pasa por webhook req.params type : ", req.params.type);
+        console.log("pasa por webhook req.query.type type : ", req.query.type);
         // console.log("pasa por req : ",req)
-        if (req.method === "POST") {
-            console.log("pasa por POST : ");
-            let body = "";
-            req.on("data", chunk => {
-                body += chunk.toString();
-                console.log("body 1 ", body);
-            });
-            req.on("end", () => {
-                console.log("pasa por emd  2 : ");
-                console.log(body, "webhook response");
-                res.end("ok");
+        if (req.query.type === 'payment') { // hay otros, nos importa solo payment
+            const paymentId = req.query.id; // ID de payment en MercadoPago
+            console.log("pasa por webhook paymentId : ", paymentId);
+            // Documentación de pagos: https://www.mercadopago.cl/developers/es/reference/payments/_payments_search/get/
+            mercadopago.payments.get(paymentId).then((error, payment) => {
+                // Obtenemos los datos del pago desde MP
+                const orderId = payment.external_reference; // esto es el ID de la orden que especificamos en la linea 15
+                console.log("pasa por mercadopago.payments orderId : ", orderId);
+                // buscamos en nuestra db la orden
+                // db.orders.find(orderId).then((order) => {
+                //   if (order.totalPrice === payment.transaction_amount) { // para que no se nos hagan los vivos XD
+                //     order.status = payment.status; // hay muchos estados, revisa https://www.mercadopago.cl/developers/es/reference/payments/_payments_search/get/
+                //     // comprobamos que sea "approved" y que no hayamos entregado ya el pedido... recuerda que "order" es algo que
+                //     // debes implementar tu, que podría tener un cambpo "delivered" para saber si ya hiciste entrega o no del
+                //     // pedido
+                //     if (order.status === 'approved' && !order.delivered) {
+                //       deliverOrder(order); // función ficticia que debes implementar... es básicamente "entregar" el producto
+                //     }
+                //   }
+                // });
             });
         }
         // res.send("<html> <head>WebHook!</head><body><h1> /WebHook  </p></h1></body></html>");
