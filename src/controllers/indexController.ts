@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
-const mercadopago = require ('mercadopago');
+const axios = require("axios");
+var https = require('follow-redirects').https;
+var fs = require('fs');
 
 class IndexController {
 
@@ -36,14 +38,31 @@ class IndexController {
 
           console.log("url es : ",url)
 
-          const request = await axios.get(url, {
-            // hacemos el POST a la url que declaramos arriba, con las preferencias
-                  headers: {
-                    Authorization: 'Bearer ' + process.env.MP_ACCESS_TOKEN_TEST //the token is a variable which holds the token
-                  }
-            });
+          
+          var options = {
+            'method': 'GET',
+            'hostname': 'api.mercadopago.com',
+            'path': '/v1/payments/'+ paymentId,
+            'headers': {
+              'Authorization': 'Bearer ' + process.env.MP_ACCESS_TOKEN_TEST
+            },
+            'maxRedirects': 20
+          };
 
-            console.log("request: 48 ",request);
+          var request = https.request(options, function (res: any) {
+           var body = '';
+            res.on('data', function(d: any) {
+                body += d;
+            });
+            res.on('end', function() {
+
+                // Data reception is done, do whatever with it!
+                var parsed = JSON.parse(body);
+                console.log('endSTATUS: ' + parsed.status);
+            })
+          });
+
+          // request.end();
         }
           // Documentación de pagos: https://www.mercadopago.cl/developers/es/reference/payments/_payments_search/get/
         //   mercadopago.payments.get(paymentId).then((error: any, payment: any) => {

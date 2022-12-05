@@ -152,7 +152,7 @@ async function createPaymentMercadoPago(name: any, price: any, unit: any, img: a
             failure: "https://mp-checkout-api.herokuapp.com/error" 
     // url a la que va a redireccionar si falla el pago
           }, 
-          notification_url: "https://mp-checkout-api.herokuapp.com/ipn", 
+          notification_url: "https://mp-checkout-api.herokuapp.com/webhook", 
     // declaramos nuestra url donde recibiremos las notificaciones
           auto_return: "approved" 
     // si la compra es exitosa automaticamente redirige a "success" de back_urls

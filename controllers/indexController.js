@@ -10,7 +10,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.indexController = void 0;
-const mercadopago = require('mercadopago');
+const axios = require("axios");
+var https = require('follow-redirects').https;
+var fs = require('fs');
 class IndexController {
     index(req, res) {
         res.send("<html> <head>Index!</head><body><h1>Esta es la pagina en la ruta / </p></h1></body></html>");
@@ -35,13 +37,27 @@ class IndexController {
                 console.log("pasa por webhook paymentId : ", paymentId);
                 const url = "https://api.mercadopago.com/v1/payments/" + paymentId;
                 console.log("url es : ", url);
-                const request = yield axios.get(url, {
-                    // hacemos el POST a la url que declaramos arriba, con las preferencias
-                    headers: {
-                        Authorization: 'Bearer ' + process.env.MP_ACCESS_TOKEN_TEST //the token is a variable which holds the token
-                    }
+                var options = {
+                    'method': 'GET',
+                    'hostname': 'api.mercadopago.com',
+                    'path': '/v1/payments/' + paymentId,
+                    'headers': {
+                        'Authorization': 'Bearer ' + process.env.MP_ACCESS_TOKEN_TEST
+                    },
+                    'maxRedirects': 20
+                };
+                var request = https.request(options, function (res) {
+                    var body = '';
+                    res.on('data', function (d) {
+                        body += d;
+                    });
+                    res.on('end', function () {
+                        // Data reception is done, do whatever with it!
+                        var parsed = JSON.parse(body);
+                        console.log('endSTATUS: ' + parsed.status);
+                    });
                 });
-                console.log("request: 48 ", request);
+                // request.end();
             }
             // Documentación de pagos: https://www.mercadopago.cl/developers/es/reference/payments/_payments_search/get/
             //   mercadopago.payments.get(paymentId).then((error: any, payment: any) => {
