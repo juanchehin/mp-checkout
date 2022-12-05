@@ -18,6 +18,9 @@ class IndexController {
     webhook(req, res) {
         console.log("pasa por webhook");
         console.log("pasa por req.method : ", req.method);
+        console.log("pasa por webhook");
+        console.log("pasa por webhook req.params : ", req.params);
+        console.log("pasa por webhook req.params type : ", req.params.type);
         // console.log("pasa por req : ",req)
         if (req.method === "POST") {
             console.log("pasa por POST : ");
