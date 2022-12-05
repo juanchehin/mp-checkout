@@ -23,6 +23,7 @@ class IndexController {
 
         console.log("pasa por webhook")
         console.log("pasa por req.method : ",req.method)
+        console.log("pasa por webhook req.query : ",req.query)
 
         console.log("pasa por webhook")
         console.log("pasa por webhook req.params : ",req.params)
