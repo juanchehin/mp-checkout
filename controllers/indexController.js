@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.indexController = void 0;
 const mercadopago = require('mercadopago');
@@ -16,35 +25,45 @@ class IndexController {
         res.send("<html> <head>success!</head><body><h1>Esta es la pagina en la ruta /success </p></h1></body></html>");
     }
     webhook(req, res) {
-        console.log("pasa por webhook");
-        console.log("pasa por req.method : ", req.method);
-        console.log("pasa por webhook req.query : ", req.query);
-        console.log("pasa por webhook req.query.type type : ", req.query.type);
-        console.log("pasa por webhook req.query.data : ", req.query['data.id']);
-        // console.log("pasa por req : ",req)
-        if (req.query.type === 'payment') { // hay otros, nos importa solo payment
-            const paymentId = req.query['data.id']; // ID de payment en MercadoPago
-            console.log("pasa por webhook paymentId : ", paymentId);
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log("pasa por webhook req.query : ", req.query);
+            console.log("pasa por webhook req.query.type type : ", req.query.type);
+            console.log("pasa por webhook req.query.data : ", req.query['data.id']);
+            // console.log("pasa por req : ",req)
+            if (req.query.type === 'payment') { // hay otros, nos importa solo payment
+                const paymentId = req.query['data.id']; // ID de payment en MercadoPago
+                console.log("pasa por webhook paymentId : ", paymentId);
+                const url = "https://api.mercadopago.com/v1/payments/" + paymentId;
+                console.log("url es : ", url);
+                const request = yield axios.get(url, {
+                    // hacemos el POST a la url que declaramos arriba, con las preferencias
+                    headers: {
+                        Authorization: 'Bearer ' + process.env.MP_ACCESS_TOKEN_TEST //the token is a variable which holds the token
+                    }
+                });
+                console.log("request: 48 ", request);
+            }
             // Documentación de pagos: https://www.mercadopago.cl/developers/es/reference/payments/_payments_search/get/
-            mercadopago.payments.get(paymentId).then((error, payment) => {
-                // Obtenemos los datos del pago desde MP
-                const orderId = payment.external_reference; // esto es el ID de la orden que especificamos en la linea 15
-                console.log("pasa por mercadopago.payments orderId : ", orderId);
-                // buscamos en nuestra db la orden
-                // db.orders.find(orderId).then((order) => {
-                //   if (order.totalPrice === payment.transaction_amount) { // para que no se nos hagan los vivos XD
-                //     order.status = payment.status; // hay muchos estados, revisa https://www.mercadopago.cl/developers/es/reference/payments/_payments_search/get/
-                //     // comprobamos que sea "approved" y que no hayamos entregado ya el pedido... recuerda que "order" es algo que
-                //     // debes implementar tu, que podría tener un cambpo "delivered" para saber si ya hiciste entrega o no del
-                //     // pedido
-                //     if (order.status === 'approved' && !order.delivered) {
-                //       deliverOrder(order); // función ficticia que debes implementar... es básicamente "entregar" el producto
-                //     }
-                //   }
-                // });
-            });
-        }
-        // res.send("<html> <head>WebHook!</head><body><h1> /WebHook  </p></h1></body></html>");
+            //   mercadopago.payments.get(paymentId).then((error: any, payment: any) => {
+            //     // Obtenemos los datos del pago desde MP
+            //     const orderId = payment.external_reference; // esto es el ID de la orden que especificamos en la linea 15
+            //     console.log("pasa por mercadopago.payments orderId : ",orderId)
+            //     // buscamos en nuestra db la orden
+            //     db.orders.find(orderId).then((order) => {
+            //       if (order.totalPrice === payment.transaction_amount) { // para que no se nos hagan los vivos XD
+            //         order.status = payment.status; // hay muchos estados, revisa https://www.mercadopago.cl/developers/es/reference/payments/_payments_search/get/
+            //         // comprobamos que sea "approved" y que no hayamos entregado ya el pedido... recuerda que "order" es algo que
+            //         // debes implementar tu, que podría tener un cambpo "delivered" para saber si ya hiciste entrega o no del
+            //         // pedido
+            //         if (order.status === 'approved' && !order.delivered) {
+            //           deliverOrder(order); // función ficticia que debes implementar... es básicamente "entregar" el producto
+            //         }
+            //       }
+            //     });
+            //   });
+            // }
+            // res.send("<html> <head>WebHook!</head><body><h1> /WebHook  </p></h1></body></html>");
+        });
     }
     ipn(req, res) {
         console.log("pasa por ipn");
