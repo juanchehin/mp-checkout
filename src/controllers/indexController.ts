@@ -45,9 +45,10 @@ class IndexController {
     public ipn(req: Request, res: Response) {
 
         console.log("pasa por ipn")
-        console.log("pasa por ipn req.method : ",req.method)
-        console.log("pasa por ipn req : ",req)
-        console.log("pasa por ipn req.query.type : ",req.query.type)
+        console.log("pasa por req.params : ",req.params)
+        // console.log("pasa por ipn req.method : ",req.method)
+        // console.log("pasa por ipn req : ",req)
+        // console.log("pasa por ipn req.query.type : ",req.query.type)
         
 
         if (req.method === "POST") { 
