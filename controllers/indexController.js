@@ -20,9 +20,10 @@ class IndexController {
         console.log("pasa por req.method : ", req.method);
         console.log("pasa por webhook req.query : ", req.query);
         console.log("pasa por webhook req.query.type type : ", req.query.type);
+        console.log("pasa por webhook req.query.data : ", req.query['data.id']);
         // console.log("pasa por req : ",req)
         if (req.query.type === 'payment') { // hay otros, nos importa solo payment
-            const paymentId = req.query.id; // ID de payment en MercadoPago
+            const paymentId = req.query['data.id']; // ID de payment en MercadoPago
             console.log("pasa por webhook paymentId : ", paymentId);
             // Documentación de pagos: https://www.mercadopago.cl/developers/es/reference/payments/_payments_search/get/
             mercadopago.payments.get(paymentId).then((error, payment) => {
