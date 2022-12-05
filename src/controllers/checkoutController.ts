@@ -47,7 +47,7 @@ public async getMercadoPagoLink(req: Request, res: Response): Promise<any> {
 }
 
 // ==================================================
-//  Aqui recibimos las notificacinoes de MP
+// (SIN USO,VER INDEXCONTROLLER) Aqui recibimos las notificacinoes de MP
 // ==================================================
 public async webhook(req: Request, res: Response): Promise<any> {
         res.json({text: 'Entraste a webhook!'});

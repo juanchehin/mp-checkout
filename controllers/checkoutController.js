@@ -47,7 +47,7 @@ class CheckoutController {
         });
     }
     // ==================================================
-    //  Aqui recibimos las notificacinoes de MP
+    // (SIN USO,VER INDEXCONTROLLER) Aqui recibimos las notificacinoes de MP
     // ==================================================
     webhook(req, res) {
         return __awaiter(this, void 0, void 0, function* () {

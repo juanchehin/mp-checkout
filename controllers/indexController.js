@@ -33,6 +33,24 @@ class IndexController {
         }
         res.send("<html> <head>WebHook!</head><body><h1> /WebHook  </p></h1></body></html>");
     }
+    ipn(req, res) {
+        console.log("pasa por ipn");
+        console.log("pasa por ipn req.method : ", req.method);
+        console.log("pasa por ipn req : ", req);
+        if (req.method === "POST") {
+            console.log("pasa ipn por POST : ");
+            let body = "";
+            req.on("data", chunk => {
+                body += chunk.toString();
+                console.log("body ipn 1 ", body);
+            });
+            req.on("end", () => {
+                console.log("pasa por ipn emd  2 : ");
+                console.log(body, "webhook response");
+                res.end("ok");
+            });
+        }
+    }
 }
 exports.indexController = new IndexController;
 exports.default = exports.indexController;

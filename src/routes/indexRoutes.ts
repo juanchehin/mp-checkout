@@ -17,6 +17,7 @@ class IndexRoutes {
         this.router.get('/error', indexController.error);
         this.router.get('/pending', indexController.pending);
         this.router.post('/webhook', indexController.webhook);
+        this.router.post('/ipn', indexController.ipn);
     }
 
 }
