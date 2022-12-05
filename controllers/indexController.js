@@ -17,7 +17,7 @@ class IndexController {
     webhook(req, res) {
         console.log("pasa por webhook");
         console.log("pasa por req.method : ", req.method);
-        console.log("pasa por req : ", req);
+        // console.log("pasa por req : ",req)
         if (req.method === "POST") {
             console.log("pasa por POST : ");
             let body = "";
@@ -31,7 +31,7 @@ class IndexController {
                 res.end("ok");
             });
         }
-        res.send("<html> <head>WebHook!</head><body><h1> /WebHook  </p></h1></body></html>");
+        // res.send("<html> <head>WebHook!</head><body><h1> /WebHook  </p></h1></body></html>");
     }
     ipn(req, res) {
         console.log("pasa por ipn");
